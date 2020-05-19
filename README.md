@@ -1,10 +1,10 @@
 # docker-nextepc
 
-Extension of this [original repository](https://github.com/Joanguitar/docker-nextepc) as an extension of this [original repository](https://github.com/ravens/docker-nextepc).
+Extension of this [original repository](https://github.com/Joanguitar/docker-nextepc) as an extension of this [initial repository](https://github.com/ravens/docker-nextepc).
 
 Any credit should be given to the original authors.
 
-Disclaimer: Due to some hardware related inconviniences this project has not been properly tested and it is very probable that it has some issues related to with the authomatic attachment of UEs to eNBs. Given that case, some proposals are described below.
+Disclaimer: Due to some hardware related inconviniences this project has not been properly tested and it is very probable that it has some issues related to the authomatic attachment of UEs to eNBs. Given that case, some proposals are described below.
 
 ## How to run (On Linux)
 
@@ -65,19 +65,19 @@ I got it running with 4GB of allocated memory and 4CPU cores without any problem
 
 ## What's different
 
-- Added a second eNB container ("enb2")
-- Changed references of "enb" to "enb1"
-- Changed dependencies of UE2 on eNB2
+- Added a second eNB container (`enb2`)
+- Changed references of `enb` to `enb1`
+- Changed dependency of `ue2` to `enb2`
 - Registred both UEs
 
 ## Configuration
 
-The SIM card provisioned in the virtual UE1 (from srsUE) and the EPC is using the following parameters : 
+The SIM card provisioned in the virtual UE1 (from srsUE) and the EPC is using the following parameters :
  * IMSI=001010000000001
  * Ki=c8eba87c1074edd06885cb0486718341
  * OPc=17b6c0157895bcaa1efc1cef55033f5f
 
-The SIM card provisioned in the virtual UE2 (from srsUE) and the EPC is using the following parameters : 
+The SIM card provisioned in the virtual UE2 (from srsUE) and the EPC is using the following parameters :
  * IMSI=001010000000002
  * Ki=c8eba87c1074edd06885cb0486718342
  * OPc=17b6c0157895bcaa1efc1cef55033f6f
@@ -87,13 +87,12 @@ These parameters can be changed in run_ue1.sh and run_ue2.sh of the Virtual-UE-e
 ## Porposals of fixing UE attament errors
 
 ### First proposal
-- Add another network to the UE pool in the file nextepc.conf "- addr: 45.46.0.1/16" between the lines 340 and 341.
-- Duplicate the file route_ue.sh and rename them route_ue1.sh and route_ue2.sh.
-- Change the line 6 in route_ue2.sh to ping -i 10 45.46.0.1
-- In the file docker-compose.yml, change the volumes of the containers ue1 and ue2 to make reference to route_ue1.sh and route_ue2.sh respectivelly instead of route_ue.sh.
+- Add another network to the UE pool in the file nextepc.conf `- addr: 45.46.0.1/16` between the lines 340 and 341.
+- Duplicate the file route_ue.sh and rename the copies as route_ue1.sh and route_ue2.sh.
+- Change the line 6 in route_ue2.sh to `ping -i 10 45.46.0.1`
+- In the file docker-compose.yml, change the volumes of the containers `ue1` and `ue2` to make reference to route_ue1.sh and route_ue2.sh respectivelly instead of route_ue.sh.
 
 ### Second proposal
-- Set explicitelly the virtual radio networks in the file docker-compose.yml , as it is done in the version of (https://github.com/ravens/docker-nextepc). Make sure to create two different networks: 45.45.0.1/16 for ue1 and enb1, and 45.46.0.1/16 for ue2 and enb2.
-- Change the line 6 in route_ue2.sh to ping -i 10 45.46.0.1
-- In the file docker-compose.yml, change the volumes of the containers ue1 and ue2 to make reference to route_ue1.sh and route_ue2.sh respectivelly instead of route_ue.sh.
- 
+- Set explicitelly the virtual radio networks in the file docker-compose.yml , as it is done in the version of (https://github.com/ravens/docker-nextepc). Make sure to create two different networks: `45.45.0.1/16` for `ue1` and `enb1`, and `45.46.0.1/16` for `ue2` and `enb2`.
+- Change the line 6 in route_ue2.sh to `ping -i 10 45.46.0.1`
+- In the file docker-compose.yml, change the volumes of the containers `ue1` and `ue2` to make reference to route_ue1.sh and route_ue2.sh respectivelly instead of route_ue.sh.
